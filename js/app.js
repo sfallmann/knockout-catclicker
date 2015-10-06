@@ -1,0 +1,96 @@
+initialCats = [
+    {
+        clickCount : 0,
+        name : 'Tabby',
+        imgSrc : 'img/434164568_fea0ad4013_z.jpg',
+        imgAttribution : 'https://www.flickr.com/photos/bigtallguy/434164568',
+        nicknames: ['Dummy', 'Stoopid']
+    },
+    {
+        clickCount : 0,
+        name : 'Tiger',
+        imgSrc : 'img/4154543904_6e2428c421_z.jpg',
+        imgAttribution : 'https://www.flickr.com/photos/xshamx/4154543904',
+        nicknames: ['Sizzlechest','Jerky']
+    },
+    {
+        clickCount : 0,
+        name : 'Scaredy',
+        imgSrc : 'img/22252709_010df3379e_z.jpg',
+        imgAttribution : 'https://www.flickr.com/photos/kpjas/22252709',
+        nicknames: ['Butthead','Smellyface']
+    },
+    {
+        clickCount : 0,
+        name : 'Shadow',
+        imgSrc : 'img/1413379559_412a540d29_z.jpg',
+        imgAttribution : 'https://www.flickr.com/photos/malfet/1413379559',
+        nicknames: ['Slim','Skinny']
+    },
+    {
+        clickCount : 0,
+        name : 'Sleepy',
+        imgSrc : 'img/9648464288_2516b35537_z.jpg',
+        imgAttribution : 'https://www.flickr.com/photos/onesharp/9648464288',
+        nicknames: ['Doofus']
+    }
+]
+
+
+var Cat = function(data) {
+
+    this.clickCount = ko.observable(data.clickCount);
+    this.name = ko.observable(data.name);
+    this.imgSrc = ko.observable(data.imgSrc);
+    this.imgAttribution = ko.observable(data.imgAttribution);
+
+    this.level = ko.computed(function(){
+
+
+
+        if (this.clickCount() <10)
+            return "Newbie";
+        else if (this.clickCount() >= 10 && this.clickCount()<= 20)
+            return "Apprentice";
+        else if (this.clickCount() > 20)
+            return "Master";
+
+    }, this);
+
+
+    this.nicknames = ko.observableArray([
+        "Stoopid",
+        "Butthole",
+        "Jerky",
+        "Sizzle-Chest"
+    ]);
+
+}
+
+var ViewModel = function(){
+    var self = this;
+
+    this.catList = ko.observableArray([]);
+
+    initialCats.forEach(function(catItem){
+        self.catList.push(new Cat(catItem));
+    });
+
+    console.log(this.catList());
+
+    this.currentCat = ko.observable(this.catList()[0]);
+
+    console.log(this.currentCat());
+
+    this.incrementCounter = function(){
+        self.currentCat().clickCount(self.currentCat().clickCount() + 1);
+    };
+
+    this.setCurrentCat = function(cat){
+
+        self.currentCat(cat);
+        console.log(self.currentCat().name());
+    };
+}
+
+ko.applyBindings(new ViewModel());
